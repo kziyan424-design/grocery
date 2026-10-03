@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fresh Mart | Online Grocery Store</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--green:#176b39;--lime:#a3d65c;--light:#f5f9f1;--dark:#183522}
+body{font-family:Arial,sans-serif;background:#fff;color:#233629}
+button,input{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+header{background:white;position:sticky;top:0;z-index:10;box-shadow:0 2px 12px #00000012}
+.nav{max-width:1200px;margin:auto;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.logo{font-size:25px;font-weight:800;color:var(--green)}
+.logo span{color:#8ebd38}
+.navlinks{display:flex;gap:22px;align-items:center}
+.navlinks a:hover{color:var(--green)}
+.cart-btn,.primary-btn{background:var(--green);color:white;border:0;padding:12px 18px;border-radius:9px;font-weight:bold}
+.cart-btn:hover,.primary-btn:hover{background:#0f4e29}
+.hero{background:linear-gradient(110deg,#edf8e8,#f9fced);padding:65px 20px}
+.hero-inner{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:35px}
+.hero-text{max-width:570px}
+.tag{display:inline-block;background:#dcefc9;color:var(--green);font-weight:bold;padding:8px 14px;border-radius:20px;margin-bottom:18px;font-size:13px}
+.hero h1{font-size:clamp(36px,5vw,60px);line-height:1.1;color:var(--dark);margin-bottom:20px}
+.hero h1 span{color:var(--green)}
+.hero p{line-height:1.7;color:#607064;margin-bottom:25px}
+.hero-image{width:min(43%,450px);border-radius:45% 45% 20% 20%;background:#d7eac8;min-height:300px;display:flex;align-items:center;justify-content:center;font-size:150px}
+section{padding:55px 20px}
+.container{max-width:1200px;margin:auto}
+.section-title{text-align:center;margin-bottom:30px}
+.section-title h2{font-size:32px;color:var(--dark);margin-bottom:9px}
+.section-title p{color:#738075}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.category{background:var(--light);padding:22px 10px;text-align:center;border-radius:14px;border:1px solid #e5eddf;transition:.2s}
+.category:hover{transform:translateY(-4px);border-color:#9acb72}
+.category .emoji{font-size:40px;margin-bottom:10px}
+.category h3{font-size:16px;color:var(--dark)}
+.shop-section{background:#fbfcf9}
+.shop-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:25px}
+.search{padding:12px 15px;border:1px solid #d5dfd3;border-radius:9px;width:min(100%,300px);outline-color:var(--green)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:25px}
+.filter{border:1px solid #d6e1d2;background:white;padding:9px 14px;border-radius:20px;color:#405044}
+.filter.active,.filter:hover{background:var(--green);color:white;border-color:var(--green)}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.product{background:white;border:1px solid #e8eee5;border-radius:14px;overflow:hidden;transition:.2s}
+.product:hover{transform:translateY(-4px);box-shadow:0 8px 25px #0000000c}
+.product-img{height:165px;background:#f2f7ed;display:flex;align-items:center;justify-content:center;font-size:75px}
+.product-info{padding:16px}
+.product-info h3{font-size:17px;margin-bottom:6px}
+.product-info p{font-size:13px;color:#78847a;margin-bottom:13px}
+.product-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.price{font-size:18px;font-weight:bold;color:var(--green)}
+.add-btn{background:#e6f3da;color:var(--green);border:0;border-radius:8px;padding:9px 12px;font-weight:bold}
+.add-btn:hover{background:var(--green);color:white}
+.empty{text-align:center;padding:35px;color:#6c786e;grid-column:1/-1}
+.offer{background:var(--green);color:white;border-radius:18px;padding:35px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.offer h2{font-size:30px;margin-bottom:10px}
+.offer p{color:#e4f3e6;line-height:1.6}
+.offer .offer-emoji{font-size:85px}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.info-card{text-align:center;padding:24px;border-radius:14px;background:var(--light)}
+.info-card div{font-size:35px;margin-bottom:12px}
+.info-card h3{margin-bottom:8px;color:var(--dark)}
+.info-card p{font-size:14px;color:#728074;line-height:1.5}
+footer{background:#153b25;color:white;padding:35px 20px;text-align:center}
+footer p{color:#d1e4d4;margin-top:10px;font-size:14px}
+footer a{color:#c5ed9b}
+.overlay{position:fixed;inset:0;background:#0007;z-index:30;display:none}
+.overlay.show{display:block}
+.cart-panel{position:fixed;z-index:31;right:-420px;top:0;width:min(400px,100%);height:100dvh;background:white;transition:.3s;padding:22px;display:flex;flex-direction:column}
+.cart-panel.show{right:0}
+.cart-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:17px}
+.close{border:0;background:#eee;border-radius:50%;width:35px;height:35px;font-size:20px}
+.cart-items{overflow-y:auto;flex:1;padding:15px 0}
+.cart-item{display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee;padding:13px 0}
+.cart-item .item-emoji{font-size:32px}
+.cart-item-info{flex:1}
+.cart-item-info p{font-size:13px;color:#718071;margin-top:4px}
+.qty{display:flex;align-items:center;gap:9px;margin-top:7px}
+.qty button{border:1px solid #ddd;background:white;border-radius:5px;width:25px;height:25px}
+.cart-footer{border-top:1px solid #eee;padding-top:17px}
+.total{display:flex;justify-content:space-between;font-size:20px;font-weight:bold;margin-bottom:15px}
+.whatsapp-btn{width:100%;border:0;background:#218b4d;color:white;padding:14px;border-radius:9px;font-weight:bold}
+.note{font-size:12px;color:#778178;margin-top:10px;line-height:1.5}
+@media(max-width:850px){
+ .products{grid-template-columns:repeat(2,1fr)}
+ .categories{grid-template-columns:repeat(2,1fr)}
+ .hero-image{font-size:100px;min-height:220px}
+ .navlinks{gap:12px;font-size:14px}
+}
+@media(max-width:560px){
+ .nav{flex-wrap:wrap}
+ .navlinks{order:3;width:100%;justify-content:center;border-top:1px solid #eee;padding-top:12px}
+ .logo{font-size:21px}
+ .hero{padding:42px 18px}
+ .hero-inner{flex-direction:column;text-align:center}
+ .hero-image{width:100%;min-height:170px;font-size:90px}
+ section{padding:40px 16px}
+ .products{gap:12px}
+ .product-img{height:125px;font-size:58px}
+ .product-info{padding:12px}
+ .product-info h3{font-size:15px}
+ .product-bottom{align-items:flex-start;flex-direction:column}
+ .offer{padding:25px}
+ .offer h2{font-size:23px}
+ .offer .offer-emoji{font-size:55px}
+ .info-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="#" class="logo">Fresh<span>Mart.</span></a>
+    <div class="navlinks">
+      <a href="#home">Home</a>
+      <a href="#categories">Categories</a>
+      <a href="#shop">Shop</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <button class="cart-btn" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
+  </nav>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <span class="tag">FRESHNESS AT YOUR DOORSTEP</span>
+      <h1>Fresh Grocery,<br><span>Happy Living.</span></h1>
+      <p>Fresh fruits, vegetables and daily essentials delivered right to your home. Shop fresh, eat healthy and enjoy every day.</p>
+      <a href="#shop" class="primary-btn">Shop Now →</a>
+    </div>
+    <div class="hero-image" aria-label="Grocery basket">🧺</div>
+  </div>
+</section>
+
+<section id="categories">
+  <div class="container">
+    <div class="section-title">
+      <h2>Shop by Category</h2>
+      <p>Everything you need, all in one place.</p>
+    </div>
+    <div class="categories">
+      <a href="#shop" class="category" onclick="setCategory('Fruits')"><div class="emoji">🍎</div><h3>Fresh Fruits</h3></a>
+      <a href="#shop" class="category" onclick="setCategory('Vegetables')"><div class="emoji">🥦</div><h3>Vegetables</h3></a>
+      <a href="#shop" class="category" onclick="setCategory('Dairy')"><div class="emoji">🥛</div><h3>Dairy Products</h3></a>
+      <a href="#shop" class="category" onclick="setCategory('Essentials')"><div class="emoji">🛒</div><h3>Daily Essentials</h3></a>
+    </div>
+  </div>
+</section>
+
+<section class="shop-section" id="shop">
+  <div class="container">
+    <div class="section-title">
+      <h2>Our Fresh Products</h2>
+      <p>Choose your favorites and add them to your cart.</p>
+    </div>
+    <div class="shop-head">
+      <input class="search" id="search" type="search" placeholder="🔍 Search products..." oninput="renderProducts()">
+      <strong id="productCount">Products</strong>
+    </div>
+    <div class="filters" id="filters">
+      <button class="filter active" onclick="setCategory('All')">All</button>
+      <button class="filter" onclick="setCategory('Fruits')">Fruits</button>
+      <button class="filter" onclick="setCategory('Vegetables')">Vegetables</button>
+      <button class="filter" onclick="setCategory('Dairy')">Dairy</button>
+      <button class="filter" onclick="setCategory('Essentials')">Essentials</button>
+    </div>
+    <div class="products" id="products"></div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="offer">
+      <div>
+        <h2>Fresh Deals, Every Day!</h2>
+        <p>Explore our collection of everyday grocery essentials.<br>Freshness and quality you can trust.</p>
+        <br><a href="#shop" class="primary-btn" style="background:#a3d65c;color:#183522">Explore Products →</a>
+      </div>
+      <div class="offer-emoji">🥬🍊</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="section-title">
+      <h2>Why Choose Fresh Mart?</h2>
+      <p>Making grocery shopping simple and convenient.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card"><div>🌿</div><h3>Fresh Quality</h3><p>Fresh products selected with care for your everyday needs.</p></div>
+      <div class="info-card"><div>🚚</div><h3>Home Delivery</h3><p>Convenient delivery to your doorstep. Availability depends on your area.</p></div>
+      <div class="info-card"><div>💚</div><h3>Easy Ordering</h3><p>Add products to your cart and send your order through WhatsApp.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <a href="#" class="logo" style="color:white">Fresh<span>Mart.</span></a>
+  <p>Freshness at your doorstep.</p>
+  <p>For orders and enquiries: <a id="contactLink" href="#">WhatsApp Us</a></p>
+  <p>© <span id="year"></span> Fresh Mart. All rights reserved.</p>
+</footer>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<aside class="cart-panel" id="cartPanel" aria-label="Shopping cart">
+  <div class="cart-header">
+    <h2>Your Cart 🛒</h2>
+    <button class="close" onclick="closeCart()" aria-label="Close cart">×</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="total"><span>Total</span><span id="cartTotal">₹0</span></div>
+    <button class="whatsapp-btn" onclick="checkout()">Order on WhatsApp</button>
+    <p class="note">Your order will be sent as a WhatsApp message. Payment and delivery will be confirmed directly with the store.</p>
+  </div>
+</aside>
+
+<script>
+// IMPORTANT: Replace this with the store's WhatsApp number.
+// Include country code, without +, spaces or dashes.
+const WHATSAPP_NUMBER = "91XXXXXXXXXX";
+
+const products = [
+ {id:1,name:"Apples",category:"Fruits",price:120,unit:"1 kg",emoji:"🍎"},
+ {id:2,name:"Bananas",category:"Fruits",price:50,unit:"1 dozen",emoji:"🍌"},
+ {id:3,name:"Oranges",category:"Fruits",price:80,unit:"1 kg",emoji:"🍊"},
+ {id:4,name:"Grapes",category:"Fruits",price:100,unit:"500 g",emoji:"🍇"},
+ {id:5,name:"Tomatoes",category:"Vegetables",price:40,unit:"1 kg",emoji:"🍅"},
+ {id:6,name:"Broccoli",category:"Vegetables",price:70,unit:"1 piece",emoji:"🥦"},
+ {id:7,name:"Carrots",category:"Vegetables",price:50,unit:"1 kg",emoji:"🥕"},
+ {id:8,name:"Potatoes",category:"Vegetables",price:35,unit:"1 kg",emoji:"🥔"},
+ {id:9,name:"Milk",category:"Dairy",price:60,unit:"1 litre",emoji:"🥛"},
+ {id:10,name:"Cheese",category:"Dairy",price:110,unit:"200 g",emoji:"🧀"},
+ {id:11,name:"Butter",category:"Dairy",price:55,unit:"100 g",emoji:"🧈"},
+ {id:12,name:"Bread",category:"Essentials",price:40,unit:"1 pack",emoji:"🍞"},
+ {id:13,name:"Rice",category:"Essentials",price:65,unit:"1 kg",emoji:"🍚"},
+ {id:14,name:"Cooking Oil",category:"Essentials",price:150,unit:"1 litre",emoji:"🫒"},
+ {id:15,name:"Eggs",category:"Essentials",price:75,unit:"6 pieces",emoji:"🥚"},
+ {id:16,name:"Wheat Flour",category:"Essentials",price:45,unit:"1 kg",emoji:"🌾"}
+];
+
+let cart = {};
+let activeCategory = "All";
+
+function money(value){
+ return "₹" + value.toLocaleString("en-IN");
+}
+
+function setCategory(category){
+ activeCategory = category;
+ document.querySelectorAll(".filter").forEach(btn=>{
+  btn.classList.toggle("active",btn.textContent.trim() === category);
+ });
+ renderProducts();
+}
+
+function renderProducts(){
+ const search = document.getElementById("search").value.toLowerCase().trim();
+ const filtered = products.filter(p=>
+  (activeCategory==="All" || p.category===activeCategory) &&
+  p.name.toLowerCase().includes(search)
+ );
+ const container = document.getElementById("products");
+ document.getElementById("productCount").textContent = filtered.length + " products";
+
+ if(!filtered.length){
+  container.innerHTML='<div class="empty">No products found. Try another search.</div>';
+  return;
+ }
+
+ container.innerHTML = filtered.map(p=>`
+  <article class="product">
+   <div class="product-img">${p.emoji}</div>
+   <div class="product-info">
+    <h3>${p.name}</h3>
+    <p>${p.unit}</p>
+    <div class="product-bottom">
+     <span class="price">${money(p.price)}</span>
+     <button class="add-btn" onclick="addToCart(${p.id})">+ Add</button>
+    </div>
+   </div>
+  </article>
+ `).join("");
+}
+
+function addToCart(id){
+ cart[id] = (cart[id] || 0) + 1;
+ updateCart();
+}
+
+function changeQty(id,delta){
+ cart[id] = (cart[id] || 0) + delta;
+ if(cart[id] <= 0) delete cart[id];
+ updateCart();
+}
+
+function updateCart(){
+ const count = Object.values(cart).reduce((a,b)=>a+b,0);
+ const total = products.reduce((sum,p)=>sum+p.price*(cart[p.id]||0),0);
+ document.getElementById("cartCount").textContent = count;
+ document.getElementById("cartTotal").textContent = money(total);
+
+ const items = document.getElementById("cartItems");
+ const selected = products.filter(p=>cart[p.id]);
+ if(!selected.length){
+  items.innerHTML='<div class="empty">Your cart is empty.<br><br>Start adding fresh products!</div>';
+ }else{
+  items.innerHTML = selected.map(p=>`
+   <div class="cart-item">
+    <div class="item-emoji">${p.emoji}</div>
+    <div class="cart-item-info">
+     <strong>${p.name}</strong>
+     <p>${money(p.price)} / ${p.unit}</p>
+     <div class="qty">
+      <button onclick="changeQty(${p.id},-1)">−</button>
+      <span>${cart[p.id]}</span>
+      <button onclick="changeQty(${p.id},1)">+</button>
+     </div>
+    </div>
+    <strong>${money(p.price*cart[p.id])}</strong>
+   </div>
+  `).join("");
+ }
+}
+
+function openCart(){
+ document.getElementById("overlay").classList.add("show");
+ document.getElementById("cartPanel").classList.add("show");
+}
+function closeCart(){
+ document.getElementById("overlay").classList.remove("show");
+ document.getElementById("cartPanel").classList.remove("show");
+}
+
+function checkout(){
+ const selected = products.filter(p=>cart[p.id]);
+ if(!selected.length){
+  alert("Please add products to your cart first.");
+  return;
+ }
+ if(!/^91\d{10}$/.test(WHATSAPP_NUMBER)){
+  alert("Please set the correct WhatsApp number in the HTML code first.");
+  return;
+ }
+ let total = 0;
+ let message = "Hello Fresh Mart! I want to place this order:\n\n";
+ selected.forEach(p=>{
+  const qty = cart[p.id];
+  const subtotal = p.price*qty;
+  total += subtotal;
+  message += `${p.name} (${p.unit}) x ${qty} = ${money(subtotal)}\n`;
+ });
+ message += `\nTotal: ${money(total)}\n\nPlease confirm availability and delivery details.`;
+ const url = "https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message);
+ window.open(url,"_blank");
+}
+
+document.getElementById("year").textContent = new Date().getFullYear();
+document.getElementById("contactLink").href = "https://wa.me/"+WHATSAPP_NUMBER;
+renderProducts();
+updateCart();
+</script>
+</body>
+</html>
